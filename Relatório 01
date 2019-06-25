@@ -1,0 +1,281 @@
+#include <iostream>
+#include <cstdlib>  // Para gerar números randômicos
+
+using namespace std;
+
+class intQueue                // Classe Fila
+{
+public:
+    intQueue(int firstSize);  // Contrutor da classe
+    ~intQueue();              // Destrutor da classe
+    int dequeue();            // Método para desenfileirar dado
+    void enqueue(int value);  // Método para enfileirar dado
+    int frente();             // Método para pegar o primeiro valor da fila
+    void printQueue();        // Método para imprimir na tela os dados da fila
+private:
+    int values[500];          // Vetor para registro dos dados
+    int start;                // Início da fila no vetor
+    int finish;               // Final da fila no vetor
+    int queueSize;            // Tamanho da fila
+};
+
+intQueue::~intQueue()         // Destrutor da classe
+{
+
+}
+
+int intQueue::dequeue()       // Método para desenfileirar
+{
+    int dequeueValue;         // Variável para registrar valor retirado da fila
+
+    if(queueSize == 0)        // Verificação se fila está vazia
+    {
+        cout << "Cannot dequeue! The queue is empty!\n\n";
+        return 0;             // Encerra método retornando 0
+    }
+
+    dequeueValue = values[start]; // Memoriza dado no começo da fila
+    start = start + 1;            // Passa o início da fila para o próximo dado do vetor
+    queueSize = queueSize - 1;    // Atualiza o tamanho da fila
+
+    cout << "Value dequeued: " << dequeueValue << "\n\n";
+    return dequeueValue;          // Retorna valor retirado da fila
+}
+
+void intQueue::enqueue(int newValue)      // Método para enfileirar dado
+{
+    if(queueSize >= 500)                  // Verificação se fila está cheia
+    {
+        cout << "Queue full! Could not enqueue new item!\n\n";
+        return;                           // Encerra método
+    }
+
+    if(queueSize == 0)                    // Verificação se fila está vazia
+    {
+        queueSize = queueSize + 1;        // Atualiza tamanho da fila
+        values[finish] = newValue;        // Adiciona novo valor a fila
+
+        cout << "Value " << newValue << " enqueued successfully to " << finish << "!\n\n";
+        return;
+    }
+
+    if(finish == 499)                     // Verificação a fila está no final do vetor
+    {
+        finish = 0;                       // Adiciona novo valor na posição 0 do vetor
+    }
+    else
+    {
+        finish = finish+1;                // Adiciona novo valor uma casa a frente no vetor
+    }
+
+    queueSize = queueSize + 1;            // Atualiza o tamanho da fila
+    values[finish] = newValue;            // Adiciona novo valor a fila
+
+    cout << "Value " << newValue << " enqueued successfully to " << finish << "!\n\n";
+}
+
+intQueue::frente()                  // Método para pegar o primeiro valor da fila
+{
+    if(queueSize > 0)               // Verifica se a fila possui algum valor
+    {
+        cout << "First value is: " << values[start] << "\n\n";
+        return values[start];       // Retorna o primeiro valor da fila
+    }
+    else
+    {
+        cout << "Can't get first value! Queue is empty!\n";
+        return 0;                   // Encerra método retornando 0
+    }
+}
+
+void intQueue::printQueue()             // Método para imprimir na tela os dados da fila
+{
+    cout << "Printing queue...\n\n";    
+
+    if(queueSize == 0)                  // Verifica se a fila está vazia
+    {
+        cout << "Can't print an empty queue!\n";
+        return;                         // Encerra método
+    }
+
+    if(start < finish)                          // Verifica se a fila vai além do final do vetor
+    {
+        for(int i = start; i <= finish; i++)    // Para cada dado da fila
+        {
+            cout << i << " [" << values[i] << "] | "; // Imprime dado
+        }
+    }
+    else
+    {
+        for(int i = start; i < 500; i++)        // Para cada dado da fila do início até o final do vetor
+        {
+            cout << i << " [" << values[i] << "] | "; // Imprime dado
+        }
+        for(int j = 0; j <= finish; j++)        // Para cada dado do início do vetor até o final da fila
+        {
+            cout << j << " [" << values[j] << "] | "; // Imprime dado
+        }
+
+    }
+    cout << "\n\n";\
+}
+
+intQueue::intQueue(int firstSize)         // Contrutor da classe
+{
+    start = 0;                            // Início da fila no início do vetor
+    queueSize = firstSize;                // Tamanho da fila definido na construção
+    if(firstSize == 0)                    // Verifica se a fila a ser gerada é vazia
+    {
+        finish = 0;                       // Fecha a fila vazia
+        return;
+    }
+
+    finish = firstSize - 1;               // Define final da fila
+    for(int i = start; i < queueSize; i++)    // Para cada dado da fila
+    {
+        values[i] = rand();                   // Incluir um dado aleatório na fila
+    }
+
+    cout << "Queue created successfully!\n" << "Start: " << start << "\nFinish: " << finish << "\n\n";
+}
+
+class intStack                        // Classe pilha
+{
+public:
+    intStack(int stackSize);          // Construtor da pilha
+    ~intStack();                      // Destrutor da pilha
+    int pop();                        // Método para retirar um valor da pilha
+    void push(int value);             // Método para inlcuir um valor na pilha
+    int top();                        // Método para verificar o valor no topo da pilha
+    void printStack();                // Método para imprimir os dados da pilha
+private:
+    int values[500];                  // Vetor para memorizar os dados da pilha
+    int stackSize;                    // Tamanho da pilha
+};
+
+intStack::~intStack()                 // Destrutor da pilha
+{
+
+}
+
+int intStack::pop()                   // Método para retirar um valor da pilha
+{
+    int popValue;                     // Variável para memoriza dado retirado da pilha
+
+    if(stackSize == 0)                // Verificação se a pilha está vazia
+    {
+        cout << "Cannot pop! The stack is empty!\n\n";
+        return 0;                     // Encerra método retornando 0
+    }
+
+    popValue = values[stackSize - 1];   // Memoriza dado a ser retirado da pilha
+    stackSize = stackSize - 1;          // Atualiza o tamanho da pilha
+
+    cout << "Pop done for value: " << popValue << "\n\n";
+    return popValue;                    // Retorna o valor retirado da pilha
+}
+
+void intStack::push(int newValue)       // Método para inlcuir um valor na pilha
+{
+    if(stackSize >= 500)                // Verifica se a pilha está cheia
+    {
+        cout << "Stack full! Could not push new item!\n\n";
+        return;                         // Encerra método
+    }
+
+    values[stackSize] = newValue;       // Inclui dado na pilha
+    stackSize = stackSize + 1;          // Atualiza tamanho da pilha
+
+    cout << "Value " << newValue << " pushed successfully to " << stackSize - 1 << "!\n\n";
+}
+
+int intStack::top()                     // Método para verificar o valor no topo da pilha
+{
+    if(stackSize > 0)                   // Verifica se pilha está vazia
+    {
+        cout << "Top value is: " << values[stackSize - 1] << "\n\n";
+        return values[stackSize - 1];   // Retorna valor do topo da pilha
+    }
+    else
+    {
+        cout << "Can't get top value! Stack is empty!\n";
+        return 0;                       // Encerra método e retorna 0
+    }
+}
+
+void intStack::printStack()             // Método para imprimir os dados da pilha
+{
+    cout << "Printing stack...\n\n";
+
+    if(stackSize == 0)                  // Verifica se pilha está vazia
+    {
+        cout << "Can't print an empty stack!\n";
+        return;                         // Encerra método
+    }
+
+    for(int i = stackSize - 1; i >= 0; i--)         // Para cada dado da pilha
+    {
+        cout << i << " [" << values[i] << "] | ";   // Imprime dado da pilha
+    }
+
+    cout << "\n\n";
+}
+
+intStack::intStack(int firstStackSize)      // Construtor da pilha
+{
+    stackSize = firstStackSize;             // Define tamanho da pilha
+    for(int i = 0; i < stackSize; i++)      // Para cada dado da pilha
+    {
+        values[i] = rand();                 // Definir valor aleatório
+    }
+
+    cout << "Stack created successfully!\n" << "Size: " << stackSize << "\n\n";
+}
+
+void queueTesting(void)             // Rotina para testar a fila
+{
+    intQueue testQueue(500);        // Cria fila com 500 dados
+    testQueue.printQueue();         // Imprime fila
+
+    testQueue.dequeue();            // Retira um valor da fila
+    testQueue.frente();             // Imprime primeirop valor da fila
+    testQueue.dequeue();            // Retira um valor da fila
+    testQueue.frente();             // Imprime primeirop valor da fila
+
+    testQueue.enqueue(rand());      // Adiciona um valor aleatório na fila
+    testQueue.enqueue(rand());      // Adiciona um valor aleatório na fila
+    testQueue.enqueue(rand());      // Adiciona um valor aleatório na fila
+
+    testQueue.dequeue();            // Retira um valor da fila
+    testQueue.frente();             // Imprime primeirop valor da fila
+}
+
+void stackTesting(void)             // Rotina para testar a pilha
+{
+    intStack testStack(10);         // Cria pilha com 10 dados
+    testStack.printStack();         // Imprime pilha
+
+    testStack.pop();                // Retira um valor da pilha
+    testStack.top();                // Imprime valor do topo da pilha
+    testStack.pop();                // Retira um valor da pilha
+    testStack.top();                // Imprime valor do topo da pilha
+
+    testStack.push(rand());         // Adiciona um valor aleatório na pilha
+    testStack.push(rand());         // Adiciona um valor aleatório na pilha
+    testStack.push(rand());         // Adiciona um valor aleatório na pilha
+
+    testStack.pop();                // Retira um valor da pilha
+    testStack.top();                // Imprime valor do topo da pilha
+}
+
+
+
+int main(void)                      // Rotina principal
+{
+    queueTesting();                 // Rotina para testar a fila
+
+    stackTesting();                 // Rotina para testar a pilha
+
+    cin.get();                      // Parada no final da rotina principal
+    return 0;                       // Final da rotina principal
+}
